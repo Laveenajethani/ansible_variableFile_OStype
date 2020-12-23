@@ -1,0 +1,28 @@
+- hosts: webserver
+  tasks:
+  - name: including file according to OS type
+    include_vars:
+     file: rhel.yml
+    when: ansible_facts['os_family']=="RedHat"
+
+  - name: including file according to OS type
+    include_vars:
+     file: ubuntu.yml
+    when: ansible_facts['os_family']=="Debian"
+
+  - name: "installing software"
+    package:
+     name: "{{ mysoft }}"
+     state: present
+ 
+  - name: "making index file for webserver"
+    template:
+     content: "{{ cont }}"
+     dest: "/var/www/html/index.html"
+
+  - name: "starting the service"
+    service:
+     name: "{{ mysoft }}"
+     state: started
+
+
